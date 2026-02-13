@@ -1,7 +1,6 @@
 package frc.robot.systems;
 
 import frc.robot.TeleopInput;
-import frc.robot.systems.AutoHandlerSystem.AutoFSMState;
 
 /**
  * This is a superclass for FSMs with NECCESARY methods to implement
@@ -59,13 +58,6 @@ public abstract class FSMSystem<S> {
 	 *		the robot is in autonomous mode.
 	 */
 	public abstract void update(TeleopInput input);
-
-	/**
-	 * Performs specific action based on the autoState passed in.
-	 * @param autoState autoState that the subsystem executes.
-	 * @return if the action carried out in this state has finished executing
-	 */
-	public abstract boolean updateAutonomous(AutoFSMState autoState);
 
 	/**
 	 * Decide the next state to transition to. This is a function of the inputs
