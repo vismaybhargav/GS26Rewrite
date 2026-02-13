@@ -3,8 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+
 // WPILib Imports
-import edu.wpi.first.wpilibj.TimedRobot;
 
 // Systems
 import frc.robot.motors.MotorManager;
@@ -13,7 +16,7 @@ import frc.robot.motors.MotorManager;
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
 	private TeleopInput input;
 
 	// Systems
@@ -26,6 +29,10 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		System.out.println("robotInit");
 		input = new TeleopInput();
+
+		Logger.recordMetadata("GS26Rewrite", "Robot Code");
+		Logger.addDataReceiver(new NT4Publisher());
+		Logger.start();
 	}
 
 	@Override

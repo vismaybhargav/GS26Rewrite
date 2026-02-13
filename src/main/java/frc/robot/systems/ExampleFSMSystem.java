@@ -7,8 +7,6 @@ import com.revrobotics.spark.SparkMax;
 
 // Robot Imports
 import frc.robot.TeleopInput;
-import frc.robot.motors.SparkMaxWrapper;
-import frc.robot.HardwareMap;
 
 enum FSMState {
 	START_STATE,
@@ -35,8 +33,6 @@ public class ExampleFSMSystem extends FSMSystem<FSMState> {
 	public ExampleFSMSystem() {
 		// Perform hardware init using a wrapper class
 		// this is so we can see motor outputs during simulatiuons
-		exampleMotor = new SparkMaxWrapper(HardwareMap.CAN_ID_SPARK_SHOOTER,
-										SparkMax.MotorType.kBrushless);
 
 		// Reset state machine
 		reset();
