@@ -1,7 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
+
 // WPILib Imports
-import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * Common class for providing driver inputs during Teleop.
@@ -12,13 +13,11 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class TeleopInput {
 	/* ======================== Constants ======================== */
-	private static final int LEFT_JOYSTICK_PORT = 0;
-	private static final int RIGHT_JOYSTICK_PORT = 1;
+	private static final int DRIVER_CONTROLLER_PORT = 0;
 
 	/* ======================== Private variables ======================== */
 	// Input objects
-	private Joystick leftJoystick;
-	private Joystick rightJoystick;
+	private XboxController driverController;
 
 	/* ======================== Constructor ======================== */
 	/**
@@ -27,9 +26,7 @@ public class TeleopInput {
 	 * by WPILib until teleop mode.
 	 */
 	public TeleopInput() {
-		leftJoystick = new Joystick(LEFT_JOYSTICK_PORT);
-
-		rightJoystick = new Joystick(RIGHT_JOYSTICK_PORT);
+		driverController = new XboxController(DRIVER_CONTROLLER_PORT);
 	}
 
 	/* ======================== Public methods ======================== */
@@ -39,50 +36,34 @@ public class TeleopInput {
 
 	/* ------------------------ Left Joystick ------------------------ */
 	/**
-	 * Get X axis of Left Joystick.
-	 * @return Axis value
+	 * Get the driver left y axis.
+	 * @return driver left y axis
 	 */
-	public double getLeftJoystickX() {
-		return leftJoystick.getX();
-	}
-	/**
-	 * Get Y axis of Left Joystick.
-	 * @return Axis value
-	 */
-	public double getLeftJoystickY() {
-		return leftJoystick.getY();
-	}
-	/**
-	 * Get the value of the shooter button.
-	 * @return True if button is pressed
-	 */
-	public boolean isShooterButtonPressed() {
-		return leftJoystick.getRawButton(1);
-	}
-	/**
-	 * Get the value of the intake button.
-	 * @return True if button is pressed
-	 */
-	public boolean isIntakeButtonPressed() {
-		return leftJoystick.getRawButton(2);
+	public double getDriverLeftY() {
+		return driverController.getLeftY();
 	}
 
-	/* ------------------------ Right Joystick ------------------------ */
 	/**
-	 * Get X axis of Right Joystick.
-	 * @return Axis value
+	 * Gets the driver left x axis.
+	 * @return driver left x axis
 	 */
-	public double getRightJoystickX() {
-		return rightJoystick.getX();
-	}
-	/**
-	 * Get Y axis of Right Joystick.
-	 * @return Axis value
-	 */
-	public double getRightJoystickY() {
-		return rightJoystick.getY();
+	public double getDriverLeftX() {
+		return driverController.getLeftX();
 	}
 
-	/* ======================== Private methods ======================== */
+	/**
+	 * gets the driver right x.
+	 * @return driver right x axis
+	 */
+	public double getDriverRightX() {
+		return driverController.getRightX();
+	}
 
+	/**
+	 * Gets the driver left x axis.
+	 * @return driver left x axis
+	 */
+	public double getDriverRightY() {
+		return driverController.getRightY();
+	}
 }
