@@ -2,6 +2,10 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -53,8 +57,7 @@ public class Constants {
 		public static final double KP = 3.0;
 		public static final double KI = 0.0;
 		public static final double KD = 0.0;
-		public static final Distance UPPER_THRESHOLD = Units
-			.Inches.of(100.0);
+		public static final Distance UPPER_THRESHOLD = Units.Inches.of(100.0);
 		public static final double CRUISE_VELO = 5;
 		public static final double TARGET_ACCEL = 5;
 		public static final double EXPO_KV = 0;
@@ -73,15 +76,14 @@ public class Constants {
 		public static final double UPDATE_RATE = 0.02;
 		public static final double LIMIT_SWITCH_HEIGHT = 0.01;
 		public static final double EFFECTIVE_WEIGHT = edu.wpi.first.math.util.Units.lbsToKilograms(
-			ClimberConstants.CLIMBER_WEIGHT_LBS)
-			* Math.sin(ClimberConstants.CLIMBER_ANGLE_RAD
-			);
+				ClimberConstants.CLIMBER_WEIGHT_LBS)
+				* Math.sin(ClimberConstants.CLIMBER_ANGLE_RAD);
 		public static final double DRUM_CIRCUMFERENCE_METERS = edu.wpi.first.math.util.Units
-			.inchesToMeters(1.0) * 2 * Math.PI;
+				.inchesToMeters(1.0) * 2 * Math.PI;
 	}
 
 	public static final class IntakeConstants {
-		//Targets for Pivot
+		// Targets for Pivot
 		public static final Angle GROUND_TARGET_ANGLE = Units.Radians.of(2.09);
 		public static final Angle UPPER_TARGET_ANGLE = Units.Radians.of(0);
 		public static final Angle PARTIAL_OUT_TARGET_ANGLE = Units.Radians.of(0.79);
@@ -89,13 +91,14 @@ public class Constants {
 		public static final double PIVOT_MAX_ROTATION = 2.09;
 		public static final double PIVOT_MIN_ROTATION = 0;
 
-		//Arm length in meters
+		// Arm length in meters
 		public static final double PIVOT_ARM_LENGTH = 0.5;
 
-		//The moment of inertia of the arm in kg-m²; can be calculated from CAD software.
+		// The moment of inertia of the arm in kg-m²; can be calculated from CAD
+		// software.
 		public static final double J = 0.1;
 
-		//Pivot PID
+		// Pivot PID
 		public static final double PIVOT_KG = 0.35;
 		public static final double PIVOT_KS = 0.25;
 		public static final double PIVOT_KV = 0.12;
@@ -104,7 +107,7 @@ public class Constants {
 		public static final double PIVOT_KI = 0.0;
 		public static final double PIVOT_KD = 0.2;
 
-		//Intake Motor PID
+		// Intake Motor PID
 		public static final double INTAKE_KV = 0.12;
 		public static final double INTAKE_KA = 0.0;
 		public static final double INTAKE_KP = 0.15;
@@ -113,7 +116,7 @@ public class Constants {
 		public static final double INTAKE_TARGET_VELOCITY = 20;
 		public static final double OUTTAKE_TARGET_VELOCITY = -25.0;
 
-		//Intake Gearing/Velocity Factors
+		// Intake Gearing/Velocity Factors
 		public static final double INTAKE_PIVOT_GEARING = 62.5 / (2 * Math.PI);
 		public static final double INTAKE_GEARING = 3 / (2 * Math.PI);
 
@@ -125,9 +128,43 @@ public class Constants {
 		public static final double INTAKE_TARGET_ACCEL = 20;
 		public static final double INTAKE_EXPO_KV = 0.12;
 
-		//other
+		// other
 		public static final Frequency UPDATE_FREQUENCY = Units.Hertz.of(100);
 		public static final double SIM_UPDATE_SECONDS = 0.02;
 		public static final Angle SIM_LIMIT_SWITCH_BUFFER = Units.Radians.of(0.01);
+	}
+
+	public static final class VisionConstants {
+		// AprilTag layout
+		public static final AprilTagFieldLayout TAG_LAYOUT =
+			AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+
+		// Camera names, must match names configured on coprocessor
+		public static final String LIMELIGHT_NAME = "limelight";
+
+		public static final Transform3d ROBOT_TO_LIMELIGHT =
+			new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+
+		// Basic filtering thresholds
+		public static final double MAX_AMBIGUITY = 0.3;
+		public static final double MAX_Z_ERROR = 0.75;
+
+		// Standard deviation baselines, for 1 meter distance and 1 tag
+		// (Adjusted automatically based on distance and # of tags)
+		public static final double LINEAR_STD_DEV_BASELINE = 0.02; // Meters
+		public static final double ANGULAR_STD_DEV_BASELINE = 0.06; // Radians
+
+		// Standard deviation multipliers for each camera
+		// (Adjust to trust some cameras more than others)
+		public static final double[] CAMERA_STD_DEV_FACTORS = new double[] {
+			1.0, // Camera 0
+			1.0 // Camera 1
+		};
+
+		// Multipliers to apply for MegaTag 2 observations
+		// More stable than full 3D solve
+		public static final double LINEAR_STD_DEV_MT2_FACTOR = 0.5;
+		// No rotation data available
+		public static final double ANGULAR_STD_DEV_MT2_FACTOR = Double.POSITIVE_INFINITY;
 	}
 }

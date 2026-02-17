@@ -48,6 +48,7 @@
   <!-- See https://checkstyle.org/config_filefilters.html -->
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value="Main.java$"/>
+    <property name="fileNamePattern" value="LimelightHelpers.java$">
   </module>
 
   <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
