@@ -16,6 +16,7 @@ import frc.robot.Constants.VisionConstants;
 // Systems
 import frc.robot.motors.MotorManager;
 import frc.robot.systems.DriveFSMSystem;
+import frc.robot.systems.IntakeFSMSystem;
 import frc.robot.systems.vision.Vision;
 import frc.robot.systems.vision.VisionIOLimelight;
 import frc.robot.systems.vision.VisionIOPhotonVisionSim;
@@ -29,6 +30,7 @@ public class Robot extends LoggedRobot {
 
 	private Vision vision;
 	private DriveFSMSystem driveFSMSystem;
+	private IntakeFSMSystem intakeFSMSystem;
 
 	// Systems
 
@@ -42,6 +44,8 @@ public class Robot extends LoggedRobot {
 		input = new TeleopInput();
 
 		driveFSMSystem = new DriveFSMSystem();
+		intakeFSMSystem = new IntakeFSMSystem();
+		
 
 		if (isReal()) {
 			vision = new Vision(
@@ -82,11 +86,13 @@ public class Robot extends LoggedRobot {
 	public void teleopInit() {
 		System.out.println("-------- Teleop Init --------");
 		driveFSMSystem.reset();
+		intakeFSMSystem.reset();
 	}
 
 	@Override
 	public void teleopPeriodic() {
 		driveFSMSystem.update(input);
+		intakeFSMSystem.update(input);
 
 		// logs motor values
 		MotorManager.update();

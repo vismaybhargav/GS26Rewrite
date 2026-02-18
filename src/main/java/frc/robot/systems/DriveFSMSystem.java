@@ -72,6 +72,8 @@ public class DriveFSMSystem extends FSMSystem<DriveFSMSystem.DriveFSMState> {
 					"[DRIVETRAIN] Cannot update an invalid state: " + getCurrentState().toString()
 				);
 		}
+
+		setCurrentState(nextState(input));
 	}
 
 	@Override

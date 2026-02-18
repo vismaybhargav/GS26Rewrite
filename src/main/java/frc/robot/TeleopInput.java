@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 
 // WPILib Imports
@@ -65,5 +66,25 @@ public class TeleopInput {
 	 */
 	public double getDriverRightY() {
 		return driverController.getRightY();
+	}
+
+	public boolean getOuttakeButton() {
+		return driverController.getRightBumperButton();
+	}
+
+	public boolean getIntakeButton() {
+		return driverController.getLeftBumperButton();
+	}
+
+	public boolean getIntakeStowButton() {
+		return driverController.getAButton();
+	}
+
+	public boolean getIntakeExtendButton() {
+		return driverController.getYButton();
+	}
+
+	public boolean getIntakePartialButton() {
+		return driverController.getBButton();
 	}
 }
