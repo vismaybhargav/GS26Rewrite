@@ -1,16 +1,20 @@
 package frc.robot.systems;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -19,6 +23,7 @@ import edu.wpi.first.math.numbers.N3;
 import frc.robot.TeleopInput;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.generated.CommandSwerveDrivetrain;
+import frc.robot.generated.FieldConstants;
 import frc.robot.generated.TunerConstants;
 
 public class DriveFSMSystem extends FSMSystem<DriveFSMSystem.DriveFSMState> {
@@ -39,6 +44,17 @@ public class DriveFSMSystem extends FSMSystem<DriveFSMSystem.DriveFSMState> {
 		)
 		.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+	private final SwerveRequest.FieldCentricFacingAngle driveAimAtAngle = new FieldCentricFacingAngle()
+		.withDeadband(
+			TunerConstants.SPEED_12V.in(MetersPerSecond)
+			* DrivetrainConstants.TRANSLATIONAL_DEADBAND
+		)
+		.withRotationalDeadband(
+			DrivetrainConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond)
+			* DrivetrainConstants.ROTATIONAL_DEADBAND
+		)
+		.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+	
 	/**
 	 * The driveFSMSystem.
 	 */
@@ -113,12 +129,28 @@ public class DriveFSMSystem extends FSMSystem<DriveFSMSystem.DriveFSMState> {
 			DrivetrainConstants.TRANSLATIONAL_DEADBAND
 		) * DrivetrainConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond);
 
-		drivetrain.setControl(
-			driveFieldCentric
-				.withVelocityX(xSpeed * DrivetrainConstants.TRANSLATIONAL_DAMP)
-				.withVelocityY(ySpeed * DrivetrainConstants.TRANSLATIONAL_DAMP)
-				.withRotationalRate(aSpeed * DrivetrainConstants.ROTATIONAL_DAMP)
-		);
+		var hubDiff = FieldConstants.Hub.nearFace.minus(getPose());
+		var angle = Degrees.of(Math.atan2(hubDiff.getX(), hubDiff.getY()));
+		Logger.recordOutput("Angle/Target Angle", angle.in(Degrees), "degrees");
+		Logger.recordOutput("Angle/Current Angle", getPose().getRotation().getDegrees(), "degrees");
+
+		if (input.getDriverAimAtHubButton()) {
+			drivetrain.setControl(
+					driveAimAtAngle
+							.withVelocityX(xSpeed * DrivetrainConstants.TRANSLATIONAL_DAMP)
+							.withVelocityY(ySpeed * DrivetrainConstants.TRANSLATIONAL_DAMP)
+							.withTargetDirection(new Rotation2d(angle.in(Degrees), 0))
+							.withHeadingPID(3, 0, 2.5));
+		} else {
+			drivetrain.setControl(
+				driveFieldCentric	
+					.withVelocityX(xSpeed * DrivetrainConstants.TRANSLATIONAL_DAMP)
+					.withVelocityY(ySpeed * DrivetrainConstants.TRANSLATIONAL_DAMP)
+					.withRotationalRate(aSpeed * DrivetrainConstants.ROTATIONAL_DAMP)
+			);
+		}
+
+		
 	}
 
 	/**

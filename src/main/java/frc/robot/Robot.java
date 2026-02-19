@@ -10,11 +10,11 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 import frc.robot.Constants.VisionConstants;
+import frc.robot.generated.FieldConstants;
 
 // WPILib Imports
 
 // Systems
-import frc.robot.motors.MotorManager;
 import frc.robot.systems.DriveFSMSystem;
 import frc.robot.systems.IntakeFSMSystem;
 import frc.robot.systems.vision.Vision;
@@ -78,8 +78,6 @@ public class Robot extends LoggedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		// logs motor values
-		MotorManager.update();
 	}
 
 	@Override
@@ -94,8 +92,6 @@ public class Robot extends LoggedRobot {
 		driveFSMSystem.update(input);
 		intakeFSMSystem.update(input);
 
-		// logs motor values
-		MotorManager.update();
 	}
 
 	@Override
@@ -132,5 +128,6 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void robotPeriodic() { 
 		vision.periodic();
+		Logger.recordOutput("Pose", FieldConstants.Hub.nearFace.minus(driveFSMSystem.getPose()));
 	}
 }

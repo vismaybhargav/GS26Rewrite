@@ -87,4 +87,8 @@ public class TeleopInput {
 	public boolean getIntakePartialButton() {
 		return driverController.getBButton();
 	}
+
+	public boolean getDriverAimAtHubButton() {
+		return driverController.getRightStickButton();
+	}
 }

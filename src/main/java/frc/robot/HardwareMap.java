@@ -11,6 +11,11 @@ public final class HardwareMap {
 	private static final int DIO_TEST_SETUP_CHANNEL = 9;
 	private static DigitalInput testBoardPin = new DigitalInput(HardwareMap.DIO_TEST_SETUP_CHANNEL);
 
+	// Intake CAN IDS
+	public static final int INTAKE_PIVOT_LEADER_CAN_ID = 11;
+	public static final int INTAKE_PIVOT_FOLLOWER_CAN_ID = 12;
+	public static final int INTAKE_FLYWHEEL_CAN_ID = 5;
+
 	/**
 	 * Check if the current RoboRIO is part of a test setup or real robot.
 	 * @return true if the current setup is a test setup
